@@ -1,16 +1,82 @@
+"use client";
 import Image from "next/image";
+import { useState, useEffect } from "react";
 
 export default function Home() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  
+  // 갤러리 이미지 목록
+  const slides = [
+    "/images/gallery/메인사진.jpg",
+    "/images/gallery/005b55574b89de19fcec80c7e32d8c15.jpg",
+    "/images/gallery/75def23abc7bbd4a9d64adf360eeb145.jpg",
+    "/images/gallery/ed9ad5fee6294997f6fb4dc3122feec7.jpg",
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000); // 5초마다 전환
+
+    return () => clearInterval(timer);
+  }, [slides.length]);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
   return (
     <div className="space-y-12">
-      {/* 메인 이미지 */}
-      <div className="relative">
-        <div className="w-full h-96 bg-gradient-to-r from-[#c69d6c] to-[#b8926a] rounded-lg shadow-lg"></div>
-        <div className="absolute inset-0 bg-black bg-opacity-40 rounded-lg flex items-center justify-center">
-          <div className="text-center text-white">
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">동서로교회</h1>
-            <p className="text-lg md:text-xl">하나님의 사랑이 넘치는 곳</p>
+      {/* 메인 슬라이드 */}
+      <div className="relative h-[500px] overflow-hidden rounded-lg shadow-lg">
+        {slides.map((slide, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-1000 ${
+              index === currentSlide ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <Image
+              src={slide}
+              alt={`교회 슬라이드 ${index + 1}`}
+              fill
+              className="object-cover"
+              priority={index === 0}
+            />
           </div>
+        ))}
+
+        {/* 이전/다음 버튼 */}
+        <button
+          onClick={prevSlide}
+          className="absolute left-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-3 transition z-10"
+        >
+          <i className="fa-solid fa-chevron-left text-gray-800 text-xl"></i>
+        </button>
+        <button
+          onClick={nextSlide}
+          className="absolute right-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-3 transition z-10"
+        >
+          <i className="fa-solid fa-chevron-right text-gray-800 text-xl"></i>
+        </button>
+
+        {/* 인디케이터 */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+          {slides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentSlide(index)}
+              className={`w-3 h-3 rounded-full transition ${
+                index === currentSlide
+                  ? "bg-white"
+                  : "bg-white bg-opacity-50 hover:bg-opacity-75"
+              }`}
+            />
+          ))}
         </div>
       </div>
 

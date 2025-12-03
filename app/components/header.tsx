@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Header() {
     const [side_menu, setside_menu] = useState('translate-x-full');
@@ -115,11 +116,18 @@ export default function Header() {
             {/*네비 메뉴*/}
             <div className='w-full border-b border-gray-300'>
                 <div className="flex justify-between py-2 max-w-[1280px] mx-auto relative ">
-                    <a href="/">
-                        <div className="h-20 w-32 bg-gray-200 rounded flex items-center justify-center">
-                            <span className="text-xs text-gray-500">로고</span>
-                        </div>
-                    </a>
+                    <Link href="/" className="flex items-center">
+                        <Image 
+                            src="/images/logo/동서로교회_로고1.png" 
+                            alt="동서로교회 로고" 
+                            width={512} 
+                            height={320}
+                            className="h-20 w-auto object-contain"
+                            priority
+                            quality={100}
+                            unoptimized
+                        />
+                    </Link>
                     <div className="hidden lg:flex font-bold text-lg space-x-15 justify-center pl-[5%] items-center">
                         <div className='group'>
                             <Link href="/about">교회소개</Link>
