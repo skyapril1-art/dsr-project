@@ -30,7 +30,17 @@ export default function Home() {
   };
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-5">
+      {/* 환영 메시지 */}
+      <section className="text-center py-12">
+        <h2 className="text-3xl font-bold text-gray-800 mb-6">동서로교회에 오신 것을 환영합니다</h2>
+        <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          우리는 하나님의 말씀을 중심으로 한 신앙 공동체입니다. 
+          모든 사람이 하나님의 사랑을 경험하고 성장할 수 있는 곳입니다.
+          함께 예배하고, 교제하며, 섬기는 기쁨을 나누어요.
+        </p>
+      </section>
+
       {/* 메인 슬라이드 */}
       <div className="relative h-[500px] overflow-hidden rounded-lg shadow-lg">
         {slides.map((slide, index) => (
@@ -79,16 +89,6 @@ export default function Home() {
           ))}
         </div>
       </div>
-
-      {/* 환영 메시지 */}
-      <section className="text-center py-12">
-        <h2 className="text-3xl font-bold text-gray-800 mb-6">동서로교회에 오신 것을 환영합니다</h2>
-        <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-          우리는 하나님의 말씀을 중심으로 한 신앙 공동체입니다. 
-          모든 사람이 하나님의 사랑을 경험하고 성장할 수 있는 곳입니다.
-          함께 예배하고, 교제하며, 섬기는 기쁨을 나누어요.
-        </p>
-      </section>
 
       {/* 예배 안내 */}
       <section className="bg-gray-50 p-8 rounded-lg">
@@ -139,16 +139,6 @@ export default function Home() {
             <h4 className="text-lg font-semibold mb-2">섬김</h4>
             <p className="text-gray-600">서로 섬기고 지역사회를 사랑하는 교회</p>
           </div>
-        </div>
-      </section>
-
-      {/* 연락처 */}
-      <section className="bg-[#c69d6c] text-white p-8 rounded-lg">
-        <h3 className="text-2xl font-bold text-center mb-6">오시는 길</h3>
-        <div className="text-center space-y-2">
-          <p className="text-lg"><i className="fa-solid fa-location-dot mr-2"></i>전라북도 익산시 동서로 179-49</p>
-          <p className="text-lg"><i className="fa-solid fa-phone mr-2"></i>문의: 교회 사무실</p>
-          <p className="text-lg"><i className="fa-brands fa-youtube mr-2"></i>온라인 예배도 함께하세요</p>
         </div>
       </section>
     </div>

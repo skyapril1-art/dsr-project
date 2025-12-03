@@ -131,7 +131,7 @@ export default function Header() {
                     <div className="hidden lg:flex font-bold text-lg space-x-15 justify-center pl-[5%] items-center">
                         <div className='group'>
                             <Link href="/about">교회소개</Link>
-                            <div className='absolute top-full bg-[#212121] w-[150px] invisible group-hover:visible transition-all duration-500 opacity-0 group-hover:opacity-100'>
+                            <div className='absolute top-full bg-[#212121] w-[150px] invisible group-hover:visible transition-all duration-500 opacity-0 group-hover:opacity-100 z-50'>
                                 <Link href="/about" className="block text-white p-2 hover:bg-gray-700">교회 소개</Link>
                                 <Link href="/about#history" className="block text-white p-2 hover:bg-gray-700">연혁</Link>
                                 <Link href="/about#worship" className="block text-white p-2 hover:bg-gray-700">예배안내</Link>
