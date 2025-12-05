@@ -154,9 +154,9 @@ export default function Header() {
 
             </div>
             {/*모바일 메뉴 클릭*/}
-            <div className={`fixed top-0 ${shadow} h-full`}>
+            <div className={`fixed top-0 ${shadow} h-full z-50`}>
                 <div onClick={side_toggle} className="bg-black w-[100%] h-[100%] opacity-60"></div>
-                <div className={`fixed right-0 top-0 z-50 h-full w-[300px] bg-white transition-transform duration-300 will-change-transform ${side_menu}`}>
+                <div className={`fixed right-0 top-0 z-[60] h-full w-[300px] bg-white transition-transform duration-300 will-change-transform ${side_menu}`}>
                     <div className="flex flex-col h-full items-left py-4 divide-y divide-gray-300">
                         <button onClick={hidden_toggle} className="flex justify-between px-4 h-[30px] text-l my-2 items-center">
                             <div>교회소개</div>
@@ -165,28 +165,28 @@ export default function Header() {
                             </div>
                         </button>
                         <div className={`${side_menu_hidden} flex-col w-[100%] h-auto divide-y divide-gray-300 transition-all`} >
-                            <Link href="/about" className="flex h-auto pl-9 py-1">교회 소개</Link>
-                            <Link href="/about#history" className="flex h-auto pl-9 py-1">연혁</Link>
-                            <Link href="/about#worship" className="flex h-auto pl-9 py-1">예배안내</Link>
+                            <Link href="/about" onClick={side_toggle} className="flex h-auto pl-9 py-1">교회 소개</Link>
+                            <Link href="/about#history" onClick={side_toggle} className="flex h-auto pl-9 py-1">연혁</Link>
+                            <Link href="/about#worship" onClick={side_toggle} className="flex h-auto pl-9 py-1">예배안내</Link>
                         </div>
-                        <Link href="/ministry" className="flex justify-between px-4 h-[40px] text-l py-2 items-center">
+                        <Link href="/ministry" onClick={side_toggle} className="flex justify-between px-4 h-[40px] text-l py-2 items-center">
                             사역팀
                         </Link>
-                        <Link href="/events" className="flex justify-between px-4 h-[40px] text-l py-2 items-center">
+                        <Link href="/events" onClick={side_toggle} className="flex justify-between px-4 h-[40px] text-l py-2 items-center">
                             행사
                         </Link>
-                        <Link href="/community" className="flex justify-between px-4 h-[40px] text-l py-2 items-center">
+                        <Link href="/community" onClick={side_toggle} className="flex justify-between px-4 h-[40px] text-l py-2 items-center">
                             목장
                         </Link>
-                        <Link href="/community/board" className="flex justify-between px-4 h-[40px] text-l py-2 items-center">
+                        <Link href="/community/board" onClick={side_toggle} className="flex justify-between px-4 h-[40px] text-l py-2 items-center">
                             커뮤니티
                         </Link>
-                        <Link href="/family360" className="flex justify-between px-4 h-[40px] text-l py-2 items-center">
+                        <Link href="/family360" onClick={side_toggle} className="flex justify-between px-4 h-[40px] text-l py-2 items-center">
                             가정교회360
                         </Link>
                     </div>
                 </div>
-                <button onClick={side_toggle} className={`fixed top-4 right-[310px] text-2xl text-white transition-all ${xmark}`}>
+                <button onClick={side_toggle} className={`fixed top-4 right-[310px] text-2xl text-white transition-all z-[60] ${xmark}`}>
                     <i className="fa-solid fa-xmark"></i>
                 </button>
             </div>
