@@ -30,12 +30,8 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (response.ok) {
-        // 관리자인 경우 관리자 페이지로, 일반 사용자는 홈으로
-        if (data.user.role === 'admin') {
-          window.location.href = '/admin';
-        } else {
-          window.location.href = '/';
-        }
+        // 로그인 성공 시 메인 페이지로 이동
+        window.location.href = '/';
       } else {
         alert(data.error || '로그인에 실패했습니다.');
       }

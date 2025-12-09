@@ -31,13 +31,15 @@ export default function Header() {
 
     const handleLogout = async () => {
         try {
-            await fetch('/api/auth/session', {
+            const response = await fetch('/api/auth/session', {
                 method: 'DELETE',
             });
             
-            setCurrentUser(null);
-            setIsAdmin(false);
-            window.location.reload();
+            if (response.ok) {
+                setCurrentUser(null);
+                setIsAdmin(false);
+                window.location.href = '/';
+            }
         } catch (error) {
             console.error('로그아웃 오류:', error);
         }
