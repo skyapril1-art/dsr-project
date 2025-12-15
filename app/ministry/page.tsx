@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function MinistryPage() {
   const ministries = [
     {
@@ -46,6 +48,51 @@ export default function MinistryPage() {
         <p className="text-lg text-gray-600 max-w-3xl mx-auto">
           각자의 은사를 따라 하나님의 나라를 위해 헌신하는 사역팀들을 소개합니다.
         </p>
+      </section>
+
+      {/* 목회자 소개 */}
+      <section>
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">목회자</h2>
+        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="text-center bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition">
+            <div className="relative w-full h-80 mx-auto mb-4 rounded-lg overflow-hidden">
+              <Image 
+                src="/images/ministry/담임목사.png"
+                alt="담임목사"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <h3 className="text-xl font-bold text-gray-800 mb-2">담임목사</h3>
+            <p className="text-gray-600">교회를 이끌고 말씀을 전합니다</p>
+          </div>
+          
+          <div className="text-center bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition">
+            <div className="relative w-full h-80 mx-auto mb-4 rounded-lg overflow-hidden">
+              <Image 
+                src="/images/ministry/부목사.png"
+                alt="부목사"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <h3 className="text-xl font-bold text-gray-800 mb-2">부목사</h3>
+            <p className="text-gray-600">교육과 양육을 담당합니다</p>
+          </div>
+          
+          <div className="text-center bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition">
+            <div className="relative w-full h-80 mx-auto mb-4 rounded-lg overflow-hidden">
+              <Image 
+                src="/images/ministry/전도사.png"
+                alt="전도사"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <h3 className="text-xl font-bold text-gray-800 mb-2">전도사</h3>
+            <p className="text-gray-600">전도와 심방을 담당합니다</p>
+          </div>
+        </div>
       </section>
 
       {/* 사역팀 카드들 */}
