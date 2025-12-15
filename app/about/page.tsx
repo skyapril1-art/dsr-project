@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function AboutPage() {
   return (
     <div className="py-12 space-y-12">
@@ -66,18 +68,39 @@ export default function AboutPage() {
       <section>
         <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">목회진 소개</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div className="text-center bg-white p-6 rounded-lg shadow-md">
-            <div className="w-24 h-24 bg-gray-300 rounded-full mx-auto mb-4"></div>
+          <div className="text-center bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition">
+            <div className="relative w-full h-80 mx-auto mb-4 rounded-lg overflow-hidden">
+              <Image 
+                src="/images/ministry/담임목사.png"
+                alt="담임목사"
+                fill
+                className="object-cover"
+              />
+            </div>
             <h3 className="text-xl font-semibold mb-2">담임목사</h3>
             <p className="text-gray-600">말씀과 기도로 교회를 섬기고 있습니다.</p>
           </div>
-          <div className="text-center bg-white p-6 rounded-lg shadow-md">
-            <div className="w-24 h-24 bg-gray-300 rounded-full mx-auto mb-4"></div>
+          <div className="text-center bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition">
+            <div className="relative w-full h-80 mx-auto mb-4 rounded-lg overflow-hidden">
+              <Image 
+                src="/images/ministry/부목사.png"
+                alt="부목사"
+                fill
+                className="object-cover"
+              />
+            </div>
             <h3 className="text-xl font-semibold mb-2">부목사</h3>
             <p className="text-gray-600">청년부와 교육 사역을 담당하고 있습니다.</p>
           </div>
-          <div className="text-center bg-white p-6 rounded-lg shadow-md">
-            <div className="w-24 h-24 bg-gray-300 rounded-full mx-auto mb-4"></div>
+          <div className="text-center bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition">
+            <div className="relative w-full h-80 mx-auto mb-4 rounded-lg overflow-hidden">
+              <Image 
+                src="/images/ministry/전도사.png"
+                alt="전도사"
+                fill
+                className="object-cover"
+              />
+            </div>
             <h3 className="text-xl font-semibold mb-2">전도사</h3>
             <p className="text-gray-600">어린이와 청소년 사역을 섬기고 있습니다.</p>
           </div>

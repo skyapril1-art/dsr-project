@@ -109,7 +109,7 @@ export default function Header() {
                         </>
                     )}
                     <div className="py-1">
-                        <a className="text-white text-center px-4" href="/">
+                        <a className="text-white text-center px-4" href="https://www.youtube.com/@%EC%9D%B5%EC%82%B0%EB%8F%99%EC%84%9C%EB%A1%9C%EA%B5%90%ED%9A%8C" target="_blank" rel="noopener noreferrer">
                             <i className="fa-brands fa-youtube"></i>
                         </a>
                     </div>
