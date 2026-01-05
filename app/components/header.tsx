@@ -23,9 +23,16 @@ export default function Header() {
                 const data = await response.json();
                 setCurrentUser(data.user);
                 setIsAdmin(data.isAdmin);
+            } else {
+                // 세션이 유효하지 않으면 상태 초기화
+                setCurrentUser(null);
+                setIsAdmin(false);
             }
         } catch (error) {
             console.error('사용자 상태 확인 오류:', error);
+            // 오류 발생 시에도 상태 초기화
+            setCurrentUser(null);
+            setIsAdmin(false);
         }
     };
 

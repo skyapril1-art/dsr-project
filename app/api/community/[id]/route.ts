@@ -24,6 +24,7 @@ export async function GET(
             email: true,
           },
         },
+        likes: true, // 좋아요 정보 포함
       },
     });
 
@@ -36,7 +37,19 @@ export async function GET(
       );
     }
 
-    return NextResponse.json({ post });
+    // 조회수 증가
+    await prisma.post.update({
+      where: { id: postId },
+      data: { views: { increment: 1 } },
+    });
+
+    return NextResponse.json({ 
+      post: {
+        ...post,
+        views: post.views + 1,
+        likesCount: post.likes.length,
+      }
+    });
   } catch (error) {
     console.error('게시글 조회 오류:', error);
     return NextResponse.json(

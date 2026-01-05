@@ -60,19 +60,6 @@ export default function CommunityBoardPage() {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await fetch('/api/auth/session', {
-        method: 'DELETE',
-      });
-      
-      setCurrentUser(null);
-      router.push('/');
-    } catch (error) {
-      console.error('로그아웃 오류:', error);
-    }
-  };
-
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -86,61 +73,12 @@ export default function CommunityBoardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* 헤더 */}
-      <div className="bg-[#c69d6c] text-white shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div>
-              <h1 className="text-2xl font-bold">커뮤니티 게시판</h1>
-              <p className="text-sm opacity-90">함께 나누는 믿음의 공간</p>
-            </div>
-            <div className="flex items-center space-x-4">
-              {currentUser ? (
-                <>
-                  <span className="text-sm">안녕하세요, {currentUser.name}님</span>
-                  {currentUser.role === 'admin' && (
-                    <Link 
-                      href="/admin"
-                      className="bg-white bg-opacity-20 hover:bg-opacity-30 px-3 py-1 rounded text-sm transition"
-                    >
-                      관리자
-                    </Link>
-                  )}
-                  <button 
-                    onClick={handleLogout}
-                    className="bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-sm transition"
-                  >
-                    로그아웃
-                  </button>
-                </>
-              ) : (
-                <div className="space-x-2">
-                  <Link 
-                    href="/login"
-                    className="bg-white bg-opacity-20 hover:bg-opacity-30 px-3 py-1 rounded text-sm transition"
-                  >
-                    로그인
-                  </Link>
-                  <Link 
-                    href="/signup"
-                    className="bg-white bg-opacity-20 hover:bg-opacity-30 px-3 py-1 rounded text-sm transition"
-                  >
-                    회원가입
-                  </Link>
-                </div>
-              )}
-              <Link 
-                href="/"
-                className="bg-white bg-opacity-20 hover:bg-opacity-30 px-3 py-1 rounded text-sm transition"
-              >
-                홈으로
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* 페이지 제목 */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">커뮤니티 게시판</h1>
+          <p className="text-gray-600">함께 나누는 믿음의 공간</p>
+        </div>
         {/* 글쓰기 버튼 */}
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold text-gray-800">게시글 목록</h2>
@@ -162,49 +100,42 @@ export default function CommunityBoardPage() {
         </div>
 
         {/* 게시글 목록 */}
-        <div className="space-y-4">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          <div className="grid grid-cols-12 gap-4 px-6 py-3 bg-gray-50 border-b border-gray-200 font-semibold text-sm text-gray-700">
+            <div className="col-span-1 text-center">번호</div>
+            <div className="col-span-6">제목</div>
+            <div className="col-span-2 text-center">작성자</div>
+            <div className="col-span-3 text-center">작성일</div>
+          </div>
+          
           {posts.length > 0 ? (
-            posts.map((post) => (
-              <div key={post.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition">
-                <div className="flex justify-between items-start mb-3">
-                  <h3 className="text-lg font-medium text-gray-900 hover:text-[#c69d6c] transition cursor-pointer">
+            posts.map((post, index) => (
+              <Link 
+                key={post.id}
+                href={`/community/board/${post.id}`}
+                className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-gray-100 hover:bg-gray-50 transition cursor-pointer"
+              >
+                <div className="col-span-1 text-center text-sm text-gray-600">
+                  {posts.length - index}
+                </div>
+                <div className="col-span-6">
+                  <h3 className="text-sm font-medium text-gray-900 hover:text-[#c69d6c] transition truncate">
                     {post.title}
                   </h3>
-                  <span className="text-xs text-gray-500 ml-4 whitespace-nowrap">
+                </div>
+                <div className="col-span-2 text-center">
+                  <span className="text-sm text-gray-700">{post.author.name}</span>
+                </div>
+                <div className="col-span-3 text-center">
+                  <span className="text-sm text-gray-500">
                     {new Date(post.createdAt).toLocaleDateString('ko-KR', {
                       year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit'
+                      month: '2-digit',
+                      day: '2-digit'
                     })}
                   </span>
                 </div>
-                
-                <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                  {post.content.length > 150 ? `${post.content.substring(0, 150)}...` : post.content}
-                </p>
-                
-                <div className="flex justify-between items-center text-sm">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-[#c69d6c] rounded-full flex items-center justify-center text-white text-xs font-medium">
-                      {post.author.name.charAt(0)}
-                    </div>
-                    <span className="text-gray-700 font-medium">{post.author.name}</span>
-                  </div>
-                  
-                  <div className="flex items-center space-x-4 text-gray-500">
-                    <span className="flex items-center space-x-1">
-                      <i className="fa-solid fa-eye text-xs"></i>
-                      <span>0</span>
-                    </span>
-                    <span className="flex items-center space-x-1">
-                      <i className="fa-solid fa-comment text-xs"></i>
-                      <span>0</span>
-                    </span>
-                  </div>
-                </div>
-              </div>
+              </Link>
             ))
           ) : (
             <div className="text-center py-12">

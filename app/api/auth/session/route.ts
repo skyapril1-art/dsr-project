@@ -55,10 +55,13 @@ export async function GET(request: NextRequest) {
     const sessionId = cookieStore.get('sessionId')?.value;
 
     if (!sessionId || !sessions.has(sessionId)) {
-      return NextResponse.json(
+      // 유효하지 않은 세션이면 쿠키도 삭제
+      const response = NextResponse.json(
         { error: '유효하지 않은 세션입니다.' },
         { status: 401 }
       );
+      response.cookies.delete('sessionId');
+      return response;
     }
 
     const session = sessions.get(sessionId);
