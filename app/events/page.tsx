@@ -70,11 +70,8 @@ export default function EventsPage() {
                   </div>
                 </div>
                 <div className="md:w-2/3 p-6">
-                  <div className="flex justify-between items-start mb-4">
+                  <div className="mb-4">
                     <h3 className="text-2xl font-bold text-gray-800">{event.title}</h3>
-                    <span className="bg-[#c69d6c] text-white px-3 py-1 rounded-full text-sm">
-                      예정
-                    </span>
                   </div>
                   <div className="space-y-2 mb-4">
                     <p className="flex items-center text-gray-600">
@@ -90,10 +87,7 @@ export default function EventsPage() {
                       {event.location}
                     </p>
                   </div>
-                  <p className="text-gray-600 mb-4">{event.description}</p>
-                  <button className="bg-[#c69d6c] text-white px-4 py-2 rounded hover:opacity-90 transition">
-                    참여 신청
-                  </button>
+                  <p className="text-gray-600">{event.description}</p>
                 </div>
               </div>
             </div>

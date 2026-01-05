@@ -292,10 +292,49 @@ export default function PostDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#c69d6c]"></div>
-          <p className="mt-4 text-gray-600">게시글을 불러오고 있습니다...</p>
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* 뒤로가기 버튼 스켈레톤 */}
+          <div className="mb-6">
+            <div className="h-6 w-24 bg-gray-200 rounded animate-pulse"></div>
+          </div>
+
+          {/* 게시글 카드 스켈레톤 */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+            {/* 헤더 스켈레톤 */}
+            <div className="border-b border-gray-200 p-6">
+              <div className="h-8 bg-gray-200 rounded w-3/4 mb-4 animate-pulse"></div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
+                  <div className="h-4 w-32 bg-gray-200 rounded animate-pulse"></div>
+                </div>
+                <div className="h-4 w-20 bg-gray-200 rounded animate-pulse"></div>
+              </div>
+            </div>
+
+            {/* 본문 스켈레톤 */}
+            <div className="p-6 space-y-3">
+              <div className="h-4 bg-gray-200 rounded w-full animate-pulse"></div>
+              <div className="h-4 bg-gray-200 rounded w-full animate-pulse"></div>
+              <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+            </div>
+
+            {/* 좋아요 버튼 스켈레톤 */}
+            <div className="border-t border-gray-200 p-6">
+              <div className="flex justify-center">
+                <div className="h-12 w-32 bg-gray-200 rounded-lg animate-pulse"></div>
+              </div>
+            </div>
+          </div>
+
+          {/* 댓글 섹션 스켈레톤 */}
+          <div className="mt-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className="h-6 w-32 bg-gray-200 rounded mb-6 animate-pulse"></div>
+            <div className="space-y-4">
+              <div className="h-20 bg-gray-200 rounded animate-pulse"></div>
+            </div>
+          </div>
         </div>
       </div>
     );

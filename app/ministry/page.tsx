@@ -116,11 +116,6 @@ export default function MinistryPage() {
                 ))}
               </ul>
             </div>
-            <div className="mt-4 pt-4 border-t">
-              <button className="w-full bg-[#c69d6c] text-white py-2 rounded hover:opacity-90 transition">
-                참여 문의
-              </button>
-            </div>
           </div>
         ))}
       </section>
@@ -147,11 +142,6 @@ export default function MinistryPage() {
               <li>• 하나님께 영광 돌리기</li>
             </ul>
           </div>
-        </div>
-        <div className="text-center mt-8">
-          <button className="bg-[#c69d6c] text-white px-8 py-3 rounded-lg hover:opacity-90 transition">
-            사역 참여 신청하기
-          </button>
         </div>
       </section>
 

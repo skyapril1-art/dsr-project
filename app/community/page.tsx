@@ -114,11 +114,7 @@ export default function CommunityGroupPage() {
                 </p>
               </div>
               
-              <p className="text-gray-600 text-sm mb-4">{community.description}</p>
-              
-              <button className="w-full bg-[#c69d6c] text-white py-2 rounded hover:opacity-90 transition">
-                참여 문의
-              </button>
+              <p className="text-gray-600 text-sm">{community.description}</p>
             </div>
           ))}
         </div>
@@ -147,11 +143,6 @@ export default function CommunityGroupPage() {
               <li>• 생일 축하 및 경조사</li>
             </ul>
           </div>
-        </div>
-        <div className="text-center mt-8">
-          <button className="bg-white text-[#c69d6c] px-8 py-3 rounded-lg hover:bg-gray-100 transition">
-            목장 참여 신청하기
-          </button>
         </div>
       </section>
 

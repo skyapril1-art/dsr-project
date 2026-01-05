@@ -193,19 +193,11 @@ export default function Family360Page() {
 
       {/* 신청 및 문의 */}
       <section className="bg-[#c69d6c] text-white p-8 rounded-lg text-center">
-        <h2 className="text-3xl font-bold mb-4">가정교회 360 신청</h2>
+        <h2 className="text-3xl font-bold mb-4">가정교회 360 안내</h2>
         <p className="mb-6">
           여러분의 가정이 하나님의 사랑으로 가득한 작은 교회가 되도록 함께하세요.
         </p>
-        <div className="space-y-4">
-          <button className="bg-white text-[#c69d6c] px-8 py-3 rounded-lg hover:bg-gray-100 transition mr-4">
-            신청하기
-          </button>
-          <button className="border border-white text-white px-8 py-3 rounded-lg hover:bg-white hover:text-[#c69d6c] transition">
-            자료 다운로드
-          </button>
-        </div>
-        <div className="mt-6 text-sm">
+        <div className="text-sm">
           <p>문의: 교회 사무실 | 이메일: family360@dongseoro.or.kr</p>
         </div>
       </section>
