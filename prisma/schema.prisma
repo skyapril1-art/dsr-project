@@ -75,3 +75,26 @@ model CommentLike {
   @@unique([commentId, userId]) // 한 사용자가 같은 댓글에 중복 좋아요 방지
 }
 
+model SiteContent {
+  id              Int      @id @default(autoincrement())
+  key             String   @unique  // 콘텐츠 식별자 (welcome_message, ministry_intro 등)
+  title           String              // 제목
+  content         String   @db.Text   // 내용
+  imageUrl        String?             // 이미지 URL (선택사항)
+  order           Int      @default(0) // 정렬 순서
+  isActive        Boolean  @default(true) // 활성화 여부
+  updatedAt       DateTime @updatedAt
+  updatedBy       Int?                // 수정한 관리자 ID
+}
+
+model MainSlide {
+  id              Int      @id @default(autoincrement())
+  imageUrl        String              // 이미지 경로
+  title           String?             // 슬라이드 제목 (선택사항)
+  description     String?  @db.Text   // 슬라이드 설명 (선택사항)
+  order           Int      @default(0) // 정렬 순서
+  isActive        Boolean  @default(true) // 활성화 여부
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+

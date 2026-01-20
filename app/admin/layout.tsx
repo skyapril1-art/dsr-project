@@ -1,5 +1,5 @@
 "use client";
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import "@/public/fontawesome-free-6.7.2-web/css/all.css";
@@ -10,15 +10,44 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    checkAuth();
+    
     // 로컬 스토리지에서 다크모드 설정 불러오기
     const savedMode = localStorage.getItem('adminDarkMode');
     if (savedMode === 'true') {
       setIsDarkMode(true);
     }
   }, []);
+
+  const checkAuth = async () => {
+    try {
+      const response = await fetch('/api/auth/session');
+      if (response.ok) {
+        const data = await response.json();
+        if (data.isAdmin) {
+          setIsAuthenticated(true);
+        } else {
+          // 관리자가 아닌 경우
+          alert('관리자 권한이 필요합니다.');
+          router.push('/login');
+        }
+      } else {
+        // 세션이 없는 경우
+        router.push('/login');
+      }
+    } catch (error) {
+      console.error('인증 확인 오류:', error);
+      router.push('/login');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const toggleDarkMode = () => {
     const newMode = !isDarkMode;
@@ -43,11 +72,33 @@ export default function AdminLayout({
       href: '/admin/posts',
     },
     {
+      title: '메인화면 콘텐츠',
+      icon: 'fa-solid fa-home',
+      href: '/admin/site-content',
+    },
+    {
       title: '설정',
       icon: 'fa-solid fa-gear',
       href: '/admin/settings',
     },
   ];
+
+  // 로딩 중일 때
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-900">
+        <div className="text-center">
+          <i className="fa-solid fa-spinner fa-spin text-4xl text-blue-500 mb-4"></i>
+          <p className="text-white text-lg">인증 확인 중...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // 인증되지 않은 경우 (리디렉션 중)
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <div className={`fixed inset-0 flex overflow-hidden ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>

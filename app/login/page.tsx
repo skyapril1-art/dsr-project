@@ -30,7 +30,8 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (response.ok) {
-        // 로그인 성공 시 메인 페이지로 이동
+        // 로그인 성공 시 메인 페이지로 이동 (강제 새로고침)
+        alert('로그인 성공!');
         window.location.href = '/';
       } else {
         alert(data.error || '로그인에 실패했습니다.');
