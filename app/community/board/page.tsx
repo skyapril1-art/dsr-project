@@ -48,7 +48,7 @@ export default function CommunityBoardPage() {
 
   const loadPosts = async () => {
     try {
-      const response = await fetch('/api/community');
+      const response = await fetch('/api/board');
       if (response.ok) {
         const data = await response.json();
         setPosts(data.posts || []);

@@ -98,3 +98,61 @@ model MainSlide {
   updatedAt       DateTime @updatedAt
 }
 
+model Community {
+  id              Int      @id @default(autoincrement())
+  name            String              // 목장 이름
+  leader          String              // 목자 이름
+  area            String              // 지역
+  members         Int      @default(0) // 구성원 수
+  meetingDay      String              // 모임 요일 및 시간
+  description     String?  @db.Text   // 목장 설명
+  order           Int      @default(0) // 정렬 순서
+  isActive        Boolean  @default(true) // 활성화 여부
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Testimonial {
+  id              Int      @id @default(autoincrement())
+  name            String              // 간증자 이름
+  community       String              // 소속 목장/커뮤니티
+  content         String   @db.Text   // 간증 내용
+  imageUrl        String?             // 프로필 이미지 (선택사항)
+  order           Int      @default(0) // 정렬 순서
+  isActive        Boolean  @default(true) // 활성화 여부
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Pastor {
+  id              Int      @id @default(autoincrement())
+  name            String              // 목회자 이름
+  position        String              // 직책 (담임목사, 부목사, 전도사 등)
+  description     String?  @db.Text   // 소개
+  imageUrl        String              // 사진 경로
+  order           Int      @default(0) // 정렬 순서
+  isActive        Boolean  @default(true) // 활성화 여부
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model MinistryTeam {
+  id              Int      @id @default(autoincrement())
+  name            String              // 팀 이름
+  description     String   @db.Text   // 팀 설명
+  activities      String   @db.Text   // 주요 활동 (JSON 배열 문자열)
+  icon            String              // FontAwesome 아이콘 클래스
+  order           Int      @default(0) // 정렬 순서
+  isActive        Boolean  @default(true) // 활성화 여부
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model MinistryInfo {
+  id              Int      @id @default(autoincrement())
+  key             String   @unique     // info_type (participation_guide, contact_info)
+  title           String              // 제목
+  content         String   @db.Text   // 내용 (JSON 문자열)
+  updatedAt       DateTime @updatedAt
+}
+

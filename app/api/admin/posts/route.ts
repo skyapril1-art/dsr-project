@@ -1,29 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@/app/generated/prisma';
-import { sessions } from '@/app/lib/sessions';
+import { withAdmin, handleApiError, successResponse, errorResponse, getIdFromParams } from '@/app/lib/api-utils';
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/app/lib/constants';
 
 const prisma = new PrismaClient();
 
-// Admin: 모든 게시글 조회
-export async function GET(request: NextRequest) {
+/**
+ * Admin: 모든 게시글 조회
+ */
+export const GET = withAdmin(async (request, user) => {
   try {
-    const sessionId = request.cookies.get('sessionId')?.value;
-    
-    if (!sessionId) {
-      return NextResponse.json(
-        { error: '로그인이 필요합니다.' },
-        { status: 401 }
-      );
-    }
-
-    const session = sessions.get(sessionId);
-    if (!session || session.user.role !== 'admin') {
-      return NextResponse.json(
-        { error: '관리자 권한이 필요합니다.' },
-        { status: 403 }
-      );
-    }
-
     const posts = await prisma.post.findMany({
       include: {
         author: {
@@ -45,72 +31,44 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    return NextResponse.json({ posts });
+    return successResponse({ posts });
   } catch (error) {
-    console.error('게시글 조회 오류:', error);
-    return NextResponse.json(
-      { error: '게시글을 불러오는 중 오류가 발생했습니다.' },
-      { status: 500 }
-    );
+    return handleApiError(error, ERROR_MESSAGES.INTERNAL_ERROR);
   }
-}
+});
 
-// Admin: 게시글 삭제
-export async function DELETE(request: NextRequest) {
+/**
+ * Admin: 게시글 삭제
+ */
+export const DELETE = withAdmin(async (request, user) => {
   try {
-    const sessionId = request.cookies.get('sessionId')?.value;
-    
-    if (!sessionId) {
-      return NextResponse.json(
-        { error: '로그인이 필요합니다.' },
-        { status: 401 }
-      );
-    }
-
-    const session = sessions.get(sessionId);
-    if (!session || session.user.role !== 'admin') {
-      return NextResponse.json(
-        { error: '관리자 권한이 필요합니다.' },
-        { status: 403 }
-      );
-    }
-
     const { searchParams } = new URL(request.url);
-    const postId = searchParams.get('id');
+    const postId = getIdFromParams(searchParams);
 
     if (!postId) {
-      return NextResponse.json(
-        { error: '게시글 ID가 필요합니다.' },
-        { status: 400 }
-      );
+      return errorResponse(ERROR_MESSAGES.INVALID_REQUEST, 400);
     }
 
-    // 게시글 존재 여부 확인
+    // 게시글 존재 확인
     const post = await prisma.post.findUnique({
-      where: { id: parseInt(postId) }
+      where: { id: postId }
     });
 
     if (!post) {
-      return NextResponse.json(
-        { error: '게시글을 찾을 수 없습니다.' },
-        { status: 404 }
-      );
+      return errorResponse(ERROR_MESSAGES.NOT_FOUND, 404);
     }
 
     // 게시글 삭제 (Cascade로 관련 댓글, 좋아요도 함께 삭제됨)
     await prisma.post.delete({
-      where: { id: parseInt(postId) }
+      where: { id: postId }
     });
 
-    return NextResponse.json({ 
-      message: '게시글이 삭제되었습니다.',
+    return successResponse({ 
+      message: SUCCESS_MESSAGES.DELETED,
       deletedPostId: postId 
     });
   } catch (error) {
-    console.error('게시글 삭제 오류:', error);
-    return NextResponse.json(
-      { error: '게시글 삭제 중 오류가 발생했습니다.' },
-      { status: 500 }
-    );
+    return handleApiError(error, ERROR_MESSAGES.INTERNAL_ERROR);
   }
-}
+});
+

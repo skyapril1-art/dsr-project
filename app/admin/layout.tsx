@@ -67,9 +67,19 @@ export default function AdminLayout({
       href: '/admin/users',
     },
     {
-      title: '게시글 관리',
+      title: '커뮤니티 관리',
       icon: 'fa-solid fa-file-lines',
       href: '/admin/posts',
+    },
+    {
+      title: '목장 관리',
+      icon: 'fa-solid fa-people-group',
+      href: '/admin/community',
+    },
+    {
+      title: '사역팀 관리',
+      icon: 'fa-solid fa-hands-praying',
+      href: '/admin/ministry',
     },
     {
       title: '메인화면 콘텐츠',

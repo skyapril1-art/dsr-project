@@ -43,6 +43,8 @@ export async function POST(request: NextRequest) {
     const sessionId = Math.random().toString(36).substring(2, 15) + 
                      Math.random().toString(36).substring(2, 15);
     
+    console.log('로그인 성공 - 생성된 sessionId:', sessionId);
+    
     // 세션 저장
     sessions.set(sessionId, {
       user: {
@@ -53,6 +55,9 @@ export async function POST(request: NextRequest) {
       },
       createdAt: new Date(),
     });
+
+    console.log('세션 저장 완료');
+    console.log('현재 저장된 모든 sessionId들:', Array.from(sessions.keys()));
 
     // 쿠키에 세션 ID 저장하여 응답
     const response = NextResponse.json(
@@ -70,10 +75,13 @@ export async function POST(request: NextRequest) {
 
     response.cookies.set('sessionId', sessionId, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: false, // 개발 환경에서는 false로 설정
       maxAge: 60 * 60 * 24 * 7, // 7일
       path: '/',
+      sameSite: 'lax'
     });
+
+    console.log('쿠키 설정 완료 - httpOnly: true, secure: false, path: /, sameSite: lax');
 
     return response;
 

@@ -11,28 +11,43 @@ export default function Header() {
     const [chevron_mark, setchevron_mark] = useState('fa-solid fa-chevron-down');
     const [isAdmin, setIsAdmin] = useState(false);
     const [currentUser, setCurrentUser] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         checkUserStatus();
+
+        // 로그인/로그아웃 이벤트 리스너만 유지
+        const handleAuthChange = () => {
+            checkUserStatus();
+        };
+
+        window.addEventListener('auth-change', handleAuthChange);
+
+        return () => {
+            window.removeEventListener('auth-change', handleAuthChange);
+        };
     }, []);
 
     const checkUserStatus = async () => {
         try {
-            const response = await fetch('/api/auth/session');
+            const response = await fetch('/api/auth/session', {
+                credentials: 'include',
+                cache: 'no-store'
+            });
+            
             if (response.ok) {
                 const data = await response.json();
                 setCurrentUser(data.user);
                 setIsAdmin(data.isAdmin);
             } else {
-                // 세션이 유효하지 않으면 상태 초기화
                 setCurrentUser(null);
                 setIsAdmin(false);
             }
         } catch (error) {
-            console.error('사용자 상태 확인 오류:', error);
-            // 오류 발생 시에도 상태 초기화
             setCurrentUser(null);
             setIsAdmin(false);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -45,6 +60,8 @@ export default function Header() {
             if (response.ok) {
                 setCurrentUser(null);
                 setIsAdmin(false);
+                // 커스텀 이벤트 발생
+                window.dispatchEvent(new Event('auth-change'));
                 window.location.href = '/';
             }
         } catch (error) {
@@ -73,6 +90,45 @@ export default function Header() {
         }
     }
 
+
+    // 로딩 중에는 빈 헤더 표시하여 깜빡임 방지
+    if (isLoading) {
+        return (
+            <>
+                <div className="bg-[#c69d6c] lg:bg-[rgba(198,157,108,0.7)] w-full">
+                    <div className="flex justify-end max-w-[1280px] mx-auto">
+                        <div className="py-1 px-4">
+                            <span className="text-white text-center">&nbsp;</span>
+                        </div>
+                    </div>
+                </div>
+                <div className='w-full border-b border-gray-300'>
+                    <div className="flex justify-between py-2 max-w-[1280px] mx-auto relative">
+                        <Link href="/" className="flex items-center">
+                            <Image 
+                                src="/images/logo/동서로교회_로고1.png" 
+                                alt="동서로교회 로고" 
+                                width={512} 
+                                height={320}
+                                className="h-20 w-auto object-contain"
+                                priority
+                                quality={100}
+                                unoptimized
+                            />
+                        </Link>
+                        <div className="hidden lg:flex font-bold text-lg space-x-15 justify-center pl-[5%] items-center">
+                            <Link href="/about">교회소개</Link>
+                            <Link href="/ministry">사역팀</Link>
+                            <Link href="/events">행사</Link>
+                            <Link href="/community">목장</Link>
+                            <Link href="/community/board">커뮤니티</Link>
+                            <Link href="/family360">가정교회360</Link>
+                        </div>
+                    </div>
+                </div>
+            </>
+        );
+    }
 
     return (
         <>

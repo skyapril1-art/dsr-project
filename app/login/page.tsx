@@ -1,12 +1,38 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+
+  // 컴포넌트 마운트 시 기존 세션 확인 및 정리
+  useEffect(() => {
+    const clearOldSession = async () => {
+      try {
+        // 기존 세션이 있는지 확인
+        const response = await fetch('/api/auth/session', {
+          credentials: 'include'
+        });
+        
+        if (!response.ok) {
+          // 유효하지 않은 세션이면 로그아웃 요청으로 쿠키 삭제
+          await fetch('/api/auth/session', {
+            method: 'DELETE',
+            credentials: 'include'
+          });
+        }
+      } catch (error) {
+        console.log('기존 세션 정리 중 오류 (무시해도 됨):', error);
+      }
+    };
+    
+    clearOldSession();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -24,15 +50,21 @@ export default function LoginPage() {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify(formData),
       });
 
       const data = await response.json();
+      console.log('로그인 응답:', response.status, data);
 
       if (response.ok) {
-        // 로그인 성공 시 메인 페이지로 이동 (강제 새로고침)
+        console.log('로그인 성공, 리다이렉트 중...');
         alert('로그인 성공!');
-        window.location.href = '/';
+        // alert 닫힌 후 리다이렉트
+        setTimeout(() => {
+          console.log('페이지 이동 시작');
+          window.location.href = '/';
+        }, 50);
       } else {
         alert(data.error || '로그인에 실패했습니다.');
       }

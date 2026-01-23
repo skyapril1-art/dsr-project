@@ -54,17 +54,20 @@ export async function GET(request: NextRequest) {
     const cookieStore = await cookies();
     const sessionId = cookieStore.get('sessionId')?.value;
 
+    console.log('GET /api/auth/session 호출됨');
+    console.log('sessionId:', sessionId);
+    console.log('sessions에 sessionId 존재 여부:', sessionId ? sessions.has(sessionId) : false);
+
     if (!sessionId || !sessions.has(sessionId)) {
-      // 유효하지 않은 세션이면 쿠키도 삭제
-      const response = NextResponse.json(
+      console.log('유효하지 않은 세션');
+      return NextResponse.json(
         { error: '유효하지 않은 세션입니다.' },
         { status: 401 }
       );
-      response.cookies.delete('sessionId');
-      return response;
     }
 
     const session = sessions.get(sessionId);
+    console.log('세션 데이터:', session);
     
     return NextResponse.json(
       { 

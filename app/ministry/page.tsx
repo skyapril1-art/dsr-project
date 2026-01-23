@@ -1,44 +1,81 @@
+'use client';
+
 import Image from "next/image";
+import { useEffect, useState } from "react";
+
+interface Pastor {
+  id: number;
+  name: string;
+  position: string;
+  description: string | null;
+  imageUrl: string;
+  order: number;
+}
+
+interface MinistryTeam {
+  id: number;
+  name: string;
+  description: string;
+  activities: string;
+  icon: string;
+  order: number;
+}
+
+interface MinistryInfo {
+  key: string;
+  title: string;
+  content: string;
+}
 
 export default function MinistryPage() {
-  const ministries = [
-    {
-      name: "예배팀",
-      description: "하나님께 영광을 돌리는 예배를 인도합니다.",
-      activities: ["찬양", "연주", "음향", "영상"],
-      icon: "fa-music"
-    },
-    {
-      name: "교육팀",
-      description: "말씀으로 다음 세대를 양육합니다.",
-      activities: ["주일학교", "청년부", "성경공부", "제자훈련"],
-      icon: "fa-book"
-    },
-    {
-      name: "전도팀",
-      description: "복음을 전하고 영혼을 구원합니다.",
-      activities: ["노방전도", "심방", "전도대회", "선교"],
-      icon: "fa-heart"
-    },
-    {
-      name: "봉사팀",
-      description: "사랑으로 교회와 지역사회를 섬깁니다.",
-      activities: ["청소", "주차안내", "식당봉사", "구제"],
-      icon: "fa-hands"
-    },
-    {
-      name: "기술팀",
-      description: "기술로 하나님의 일에 동참합니다.",
-      activities: ["방송", "홈페이지", "음향시설", "영상편집"],
-      icon: "fa-computer"
-    },
-    {
-      name: "행정팀",
-      description: "교회 운영을 체계적으로 관리합니다.",
-      activities: ["재정관리", "문서관리", "행사기획", "시설관리"],
-      icon: "fa-building"
-    }
-  ];
+  const [pastors, setPastors] = useState<Pastor[]>([]);
+  const [teams, setTeams] = useState<MinistryTeam[]>([]);
+  const [participationGuide, setParticipationGuide] = useState<any>(null);
+  const [contactInfo, setContactInfo] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        
+        // 목회자 정보 가져오기
+        const pastorsRes = await fetch('/api/ministry/pastors');
+        const pastorsData = await pastorsRes.json();
+        if (pastorsRes.ok) setPastors(pastorsData.pastors);
+
+        // 사역팀 정보 가져오기
+        const teamsRes = await fetch('/api/ministry/teams');
+        const teamsData = await teamsRes.json();
+        if (teamsRes.ok) setTeams(teamsData.teams);
+
+        // 참여안내 및 문의 정보 가져오기
+        const infoRes = await fetch('/api/ministry/info');
+        const infoData = await infoRes.json();
+        if (infoRes.ok) {
+          const participation = infoData.ministryInfos.find((info: MinistryInfo) => info.key === 'participation_guide');
+          const contact = infoData.ministryInfos.find((info: MinistryInfo) => info.key === 'contact_info');
+          
+          if (participation) setParticipationGuide(JSON.parse(participation.content));
+          if (contact) setContactInfo(JSON.parse(contact.content));
+        }
+      } catch (error) {
+        console.error('데이터 로딩 오류:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="py-12 flex justify-center items-center min-h-screen">
+        <div className="text-lg">로딩 중...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="py-12 space-y-12">
@@ -54,106 +91,95 @@ export default function MinistryPage() {
       <section>
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">목회자</h2>
         <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          <div className="text-center bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition">
-            <div className="relative w-full h-80 mx-auto mb-4 rounded-lg overflow-hidden">
-              <Image 
-                src="/images/ministry/담임목사.png"
-                alt="담임목사"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <h3 className="text-xl font-bold text-gray-800 mb-2">담임목사</h3>
-            <p className="text-gray-600">교회를 이끌고 말씀을 전합니다</p>
-          </div>
-          
-          <div className="text-center bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition">
-            <div className="relative w-full h-80 mx-auto mb-4 rounded-lg overflow-hidden">
-              <Image 
-                src="/images/ministry/부목사.png"
-                alt="부목사"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <h3 className="text-xl font-bold text-gray-800 mb-2">부목사</h3>
-            <p className="text-gray-600">교육과 양육을 담당합니다</p>
-          </div>
-          
-          <div className="text-center bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition">
-            <div className="relative w-full h-80 mx-auto mb-4 rounded-lg overflow-hidden">
-              <Image 
-                src="/images/ministry/전도사.png"
-                alt="전도사"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <h3 className="text-xl font-bold text-gray-800 mb-2">전도사</h3>
-            <p className="text-gray-600">전도와 심방을 담당합니다</p>
-          </div>
+          {pastors.length > 0 ? (
+            pastors.map((pastor) => (
+              <div key={pastor.id} className="text-center bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition">
+                <div className="relative w-full h-80 mx-auto mb-4 rounded-lg overflow-hidden">
+                  <Image 
+                    src={pastor.imageUrl}
+                    alt={pastor.position}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <h3 className="text-xl font-bold text-gray-800 mb-2">{pastor.position}</h3>
+                <p className="text-gray-600">{pastor.description || `${pastor.name} ${pastor.position}`}</p>
+              </div>
+            ))
+          ) : (
+            <div className="col-span-3 text-center text-gray-500">목회자 정보가 없습니다.</div>
+          )}
         </div>
       </section>
 
       {/* 사역팀 카드들 */}
       <section className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {ministries.map((ministry, index) => (
-          <div key={index} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-            <div className="text-center mb-4">
-              <div className="w-16 h-16 bg-[#c69d6c] rounded-full flex items-center justify-center mx-auto mb-4">
-                <i className={`fa-solid ${ministry.icon} text-white text-2xl`}></i>
+        {teams.length > 0 ? (
+          teams.map((team) => {
+            const activities = JSON.parse(team.activities);
+            return (
+              <div key={team.id} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <div className="text-center mb-4">
+                  <div className="w-16 h-16 bg-[#c69d6c] rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i className={`fa-solid ${team.icon} text-white text-2xl`}></i>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-800">{team.name}</h3>
+                </div>
+                <p className="text-gray-600 mb-4 text-center">{team.description}</p>
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-2">주요 활동</h4>
+                  <ul className="space-y-1">
+                    {activities.map((activity: string, actIndex: number) => (
+                      <li key={actIndex} className="text-sm text-gray-600">
+                        • {activity}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-              <h3 className="text-xl font-bold text-gray-800">{ministry.name}</h3>
-            </div>
-            <p className="text-gray-600 mb-4 text-center">{ministry.description}</p>
+            );
+          })
+        ) : (
+          <div className="col-span-3 text-center text-gray-500">사역팀 정보가 없습니다.</div>
+        )}
+      </section>
+
+      {/* 사역 참여 안내 */}
+      {participationGuide && (
+        <section className="bg-gray-50 p-8 rounded-lg">
+          <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">사역 참여 안내</h2>
+          <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <h4 className="font-semibold text-gray-800 mb-2">주요 활동</h4>
-              <ul className="space-y-1">
-                {ministry.activities.map((activity, actIndex) => (
-                  <li key={actIndex} className="text-sm text-gray-600">
-                    • {activity}
-                  </li>
+              <h3 className="text-xl font-semibold mb-4 text-[#c69d6c]">사역 참여 절차</h3>
+              <ol className="space-y-2 text-gray-600">
+                {participationGuide.procedure?.map((item: string, idx: number) => (
+                  <li key={idx}>{idx + 1}. {item}</li>
+                ))}
+              </ol>
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold mb-4 text-[#c69d6c]">사역자의 자세</h3>
+              <ul className="space-y-2 text-gray-600">
+                {participationGuide.attitude?.map((item: string, idx: number) => (
+                  <li key={idx}>• {item}</li>
                 ))}
               </ul>
             </div>
           </div>
-        ))}
-      </section>
-
-      {/* 사역 참여 안내 */}
-      <section className="bg-gray-50 p-8 rounded-lg">
-        <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">사역 참여 안내</h2>
-        <div className="grid md:grid-cols-2 gap-8">
-          <div>
-            <h3 className="text-xl font-semibold mb-4 text-[#c69d6c]">사역 참여 절차</h3>
-            <ol className="space-y-2 text-gray-600">
-              <li>1. 관심 있는 사역팀 선택</li>
-              <li>2. 해당 팀장과 상담</li>
-              <li>3. 사역 오리엔테이션 참석</li>
-              <li>4. 사역 시작</li>
-            </ol>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-4 text-[#c69d6c]">사역자의 자세</h3>
-            <ul className="space-y-2 text-gray-600">
-              <li>• 겸손한 마음으로 섬기기</li>
-              <li>• 팀원들과 협력하기</li>
-              <li>• 지속적인 성장 추구</li>
-              <li>• 하나님께 영광 돌리기</li>
-            </ul>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* 연락처 정보 */}
-      <section className="bg-[#c69d6c] text-white p-8 rounded-lg text-center">
-        <h2 className="text-2xl font-bold mb-4">사역 문의</h2>
-        <p className="mb-4">각 사역팀에 대한 자세한 문의는 교회 사무실로 연락해주세요.</p>
-        <p className="text-lg">
-          <i className="fa-solid fa-phone mr-2"></i>
-          전화: 교회 사무실
-        </p>
-      </section>
+      {contactInfo && (
+        <section className="bg-[#c69d6c] text-white p-8 rounded-lg text-center">
+          <h2 className="text-2xl font-bold mb-4">사역 문의</h2>
+          <p className="mb-4">{contactInfo.description}</p>
+          <p className="text-lg">
+            <i className="fa-solid fa-phone mr-2"></i>
+            전화: {contactInfo.phone}
+          </p>
+        </section>
+      )}
     </div>
   );
 }
