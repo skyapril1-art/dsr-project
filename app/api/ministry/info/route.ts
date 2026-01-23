@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@/app/generated/prisma';
-
-const prisma = new PrismaClient();
+import prisma from '@/app/lib/prisma';
 
 // 공개 - 사역 정보 조회
 export async function GET() {

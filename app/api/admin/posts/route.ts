@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@/app/generated/prisma';
+import prisma from '@/app/lib/prisma';
 import { withAdmin, handleApiError, successResponse, errorResponse, getIdFromParams } from '@/app/lib/api-utils';
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/app/lib/constants';
-
-const prisma = new PrismaClient();
 
 /**
  * Admin: 모든 게시글 조회

@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@/app/generated/prisma';
-
-const prisma = new PrismaClient();
+import prisma from '@/app/lib/prisma';
 
 // 간증 목록 조회 (활성화된 것만)
 export async function GET() {

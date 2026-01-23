@@ -1,9 +1,6 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@/app/generated/prisma';
+import prisma from '@/app/lib/prisma';
 
-const prisma = new PrismaClient();
-
-// 게시글 목록 조회
 export async function GET() {
   try {
     const posts = await prisma.post.findMany({
@@ -13,20 +10,30 @@ export async function GET() {
             id: true,
             name: true,
             email: true,
-          }
-        }
+          },
+        },
+        _count: {
+          select: {
+            comments: true,
+            likes: true,
+          },
+        },
       },
       orderBy: {
-        createdAt: 'desc'
-      }
+        createdAt: 'desc',
+      },
     });
 
-    return NextResponse.json({ posts });
+    const postsWithCounts = posts.map(post => ({
+      ...post,
+      commentCount: post._count.comments,
+      likeCount: post._count.likes,
+      _count: undefined,
+    }));
+
+    return NextResponse.json({ posts: postsWithCounts });
   } catch (error) {
-    console.error('게시글 조회 오류:', error);
-    return NextResponse.json(
-      { error: '게시글을 불러오는 중 오류가 발생했습니다.' },
-      { status: 500 }
-    );
+    console.error('Board fetch error:', error);
+    return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }

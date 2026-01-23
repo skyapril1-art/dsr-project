@@ -67,14 +67,14 @@ export default function AdminLayout({
       href: '/admin/users',
     },
     {
-      title: '커뮤니티 관리',
-      icon: 'fa-solid fa-file-lines',
-      href: '/admin/posts',
+      title: '메인화면 콘텐츠',
+      icon: 'fa-solid fa-home',
+      href: '/admin/site-content',
     },
     {
-      title: '목장 관리',
-      icon: 'fa-solid fa-people-group',
-      href: '/admin/community',
+      title: '교회소개 관리',
+      icon: 'fa-solid fa-church',
+      href: '/admin/about',
     },
     {
       title: '사역팀 관리',
@@ -82,9 +82,24 @@ export default function AdminLayout({
       href: '/admin/ministry',
     },
     {
-      title: '메인화면 콘텐츠',
-      icon: 'fa-solid fa-home',
-      href: '/admin/site-content',
+      title: '행사 관리',
+      icon: 'fa-solid fa-calendar-days',
+      href: '/admin/events',
+    },
+    {
+      title: '목장 관리',
+      icon: 'fa-solid fa-people-group',
+      href: '/admin/community',
+    },
+    {
+      title: '커뮤니티 관리',
+      icon: 'fa-solid fa-file-lines',
+      href: '/admin/posts',
+    },
+    {
+      title: '가정교회360 관리',
+      icon: 'fa-solid fa-house-user',
+      href: '/admin/family360',
     },
     {
       title: '설정',

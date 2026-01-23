@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@/app/generated/prisma';
 import { getSession } from '@/app/lib/sessions';
-
-const prisma = new PrismaClient();
+import prisma from '@/app/lib/prisma';
 
 // GET - 모든 슬라이드 조회 (관리자용)
 export async function GET() {

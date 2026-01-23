@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@/app/generated/prisma';
 import { getSession } from '@/app/lib/sessions';
-
-const prisma = new PrismaClient();
+import prisma from '@/app/lib/prisma';
 
 // PUT - 특정 콘텐츠 수정
 export async function PUT(

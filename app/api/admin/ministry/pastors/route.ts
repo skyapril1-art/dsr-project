@@ -1,9 +1,7 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@/app/generated/prisma';
 import { cookies } from 'next/headers';
 import { sessions } from '@/app/lib/sessions';
-
-const prisma = new PrismaClient();
+import prisma from '@/app/lib/prisma';
 
 // 목회자 목록 조회
 export async function GET() {

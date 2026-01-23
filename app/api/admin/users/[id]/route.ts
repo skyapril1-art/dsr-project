@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@/app/generated/prisma';
 import { cookies } from 'next/headers';
 import { sessions } from '@/app/lib/sessions';
-
-const prisma = new PrismaClient();
+import prisma from '@/app/lib/prisma';
 
 // 관리자 권한 확인 함수
 async function checkAdminAuth(request: NextRequest) {

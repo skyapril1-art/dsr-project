@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@/app/generated/prisma';
-
-const prisma = new PrismaClient();
+import prisma from '@/app/lib/prisma';
 
 // GET - 활성화된 슬라이드만 조회 (공개 API)
 export async function GET() {

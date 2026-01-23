@@ -156,3 +156,43 @@ model MinistryInfo {
   updatedAt       DateTime @updatedAt
 }
 
+model AboutContent {
+  id              Int      @id @default(autoincrement())
+  key             String   @unique     // vision, mission, history_item, pastor, worship_schedule
+  title           String              // 제목
+  content         String   @db.Text   // 내용 (JSON 문자열로 저장)
+  imageUrl        String?             // 이미지 URL (선택사항)
+  order           Int      @default(0) // 정렬 순서
+  isActive        Boolean  @default(true) // 활성화 여부
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Event {
+  id              Int      @id @default(autoincrement())
+  title           String              // 행사 제목
+  date            String              // 행사 날짜
+  time            String              // 행사 시간
+  location        String              // 행사 장소
+  description     String   @db.Text   // 행사 설명
+  imageUrl        String?             // 이미지 URL (선택사항)
+  eventType       String              // upcoming, past, regular
+  participants    Int?                // 참석자 수 (지난 행사용)
+  order           Int      @default(0) // 정렬 순서
+  isActive        Boolean  @default(true) // 활성화 여부
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Family360Content {
+  id              Int      @id @default(autoincrement())
+  key             String   @unique     // intro_feature, program, activity, step, statistic
+  title           String              // 제목
+  content         String   @db.Text   // 내용 (JSON 문자열로 저장)
+  icon            String?             // FontAwesome 아이콘 (선택사항)
+  order           Int      @default(0) // 정렬 순서
+  isActive        Boolean  @default(true) // 활성화 여부
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+

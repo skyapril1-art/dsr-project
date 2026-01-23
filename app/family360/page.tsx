@@ -1,4 +1,18 @@
 import { PageHeader, FeatureCard, Card, Icon, COLORS } from "@/app/components/ui";
+import prisma from "@/app/lib/prisma";
+
+async function getFamily360Content() {
+  try {
+    const content = await prisma.family360Content.findMany({
+      where: { isActive: true },
+      orderBy: { order: 'asc' }
+    });
+    return content;
+  } catch (error) {
+    console.error('Failed to fetch family360 content:', error);
+    return [];
+  }
+}
 
 // Constants
 const INTRO_FEATURES = [
@@ -161,7 +175,77 @@ const ParticipationStep = ({ step }: { step: typeof PARTICIPATION_STEPS[number] 
   </div>
 );
 
-export default function Family360Page() {
+export default async function Family360Page() {
+  const allContent = await getFamily360Content();
+  
+  // Safe JSON parse function
+  const safeParseContent = (content: string): any => {
+    try {
+      return typeof content === 'string' ? JSON.parse(content) : content;
+    } catch {
+      return content;
+    }
+  };
+  
+  // Parse content by key
+  const introFeatures = allContent
+    .filter(c => c.key.startsWith('intro_feature'))
+    .map(c => {
+      const parsed = safeParseContent(c.content);
+      return {
+        icon: c.icon || 'home',
+        title: c.title,
+        description: Array.isArray(parsed) ? parsed.join(' ') : (typeof parsed === 'string' ? parsed : '')
+      };
+    });
+  
+  const programs = allContent
+    .filter(c => c.key.startsWith('program'))
+    .map(c => {
+      const parsed = safeParseContent(c.content);
+      const content = typeof parsed === 'object' && parsed !== null ? parsed : {};
+      return {
+        icon: c.icon || 'users',
+        title: c.title,
+        age: content.age || '',
+        description: content.description || '',
+        color: (content.color || 'blue') as 'red' | 'yellow' | 'green' | 'blue'
+      };
+    });
+  
+  const coreActivities = allContent
+    .filter(c => c.key.startsWith('activity'))
+    .map(c => {
+      const parsed = safeParseContent(c.content);
+      return {
+        title: c.title,
+        items: Array.isArray(parsed) ? parsed : []
+      };
+    });
+  
+  const participationSteps = allContent
+    .filter(c => c.key.startsWith('step'))
+    .map(c => {
+      const parsed = safeParseContent(c.content);
+      const content = typeof parsed === 'object' && parsed !== null ? parsed : {};
+      return {
+        step: content.step || c.order,
+        title: c.title,
+        description: content.description || ''
+      };
+    });
+  
+  const statistics = allContent
+    .filter(c => c.key.startsWith('statistic'))
+    .map(c => {
+      const parsed = safeParseContent(c.content);
+      const content = typeof parsed === 'object' && parsed !== null ? parsed : {};
+      return {
+        number: content.number || '',
+        label: c.title,
+        description: content.description || ''
+      };
+    });
   return (
     <div className="py-12 space-y-12">
       <PageHeader
@@ -178,7 +262,7 @@ export default function Family360Page() {
       >
         <h2 className="text-3xl font-bold text-center mb-8">가정교회 360이란?</h2>
         <div className="grid md:grid-cols-3 gap-8">
-          {INTRO_FEATURES.map((feature, index) => (
+          {introFeatures.map((feature, index) => (
             <div key={index} className="text-center">
               <div className="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Icon name={feature.icon} className="text-3xl" />
@@ -194,7 +278,7 @@ export default function Family360Page() {
       <section>
         <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">프로그램 구성</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {PROGRAMS.map((program, index) => (
+          {programs.map((program, index) => (
             <ProgramCard key={index} program={program} />
           ))}
         </div>
@@ -204,42 +288,18 @@ export default function Family360Page() {
       <section className="bg-gray-50 p-8 rounded-lg">
         <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">핵심 활동</h2>
         <div className="grid md:grid-cols-2 gap-8">
-          <div>
-            <h3 className="text-xl font-semibold mb-4 text-[#c69d6c]">가정 예배</h3>
-            <ul className="space-y-2 text-gray-600">
-              <li>• 매일 가정에서 드리는 가족 예배</li>
-              <li>• 연령별 맞춤 예배 가이드 제공</li>
-              <li>• 가족 구성원 모두가 참여하는 프로그램</li>
-              <li>• 계절과 절기에 맞는 특별 예배</li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-4 text-[#c69d6c]">신앙 교육</h3>
-            <ul className="space-y-2 text-gray-600">
-              <li>• 체계적인 성경 교육 커리큘럼</li>
-              <li>• 연령별 신앙 성장 단계 프로그램</li>
-              <li>• 부모를 위한 신앙 교육 지침서</li>
-              <li>• 정기적인 평가와 피드백</li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-4 text-[#c69d6c]">생활 훈련</h3>
-            <ul className="space-y-2 text-gray-600">
-              <li>• 일상 속 신앙 실천 방법</li>
-              <li>• 기독교 세계관 교육</li>
-              <li>• 인성과 품성 개발 프로그램</li>
-              <li>• 봉사와 나눔의 실천</li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-4 text-[#c69d6c]">공동체 활동</h3>
-            <ul className="space-y-2 text-gray-600">
-              <li>• 가정교회 간 교제와 협력</li>
-              <li>• 연령별 모임과 활동</li>
-              <li>• 특별 행사와 캠프</li>
-              <li>• 지역사회 봉사 활동</li>
-            </ul>
-          </div>
+          {coreActivities.map((activity, index) => (
+            <div key={index}>
+              <h3 className="text-xl font-semibold mb-4" style={{ color: COLORS.PRIMARY }}>
+                {activity.title}
+              </h3>
+              <ul className="space-y-2 text-gray-600">
+                {activity.items.map((item, idx) => (
+                  <li key={idx}>• {item}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -248,7 +308,7 @@ export default function Family360Page() {
         <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">참여 방법</h2>
         <div className="max-w-4xl mx-auto">
           <div className="grid md:grid-cols-4 gap-4">
-            {PARTICIPATION_STEPS.map((step, index) => (
+            {participationSteps.map((step, index) => (
               <ParticipationStep key={index} step={step} />
             ))}
           </div>
@@ -259,18 +319,13 @@ export default function Family360Page() {
       <section className="bg-white p-8 rounded-lg shadow-md">
         <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">성과와 간증</h2>
         <div className="grid md:grid-cols-3 gap-8 mb-8">
-          <div className="text-center">
-            <div className="text-3xl font-bold text-[#c69d6c] mb-2">95%</div>
-            <p className="text-gray-600">프로그램 만족도</p>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-[#c69d6c] mb-2">150+</div>
-            <p className="text-gray-600">참여 가정 수</p>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-[#c69d6c] mb-2">3년</div>
-            <p className="text-gray-600">평균 참여 기간</p>
-          </div>
+          {statistics.map((stat, index) => (
+            <div key={index} className="text-center">
+              <div className="text-3xl font-bold mb-2" style={{ color: COLORS.PRIMARY }}>{stat.number}</div>
+              <p className="text-gray-600">{stat.label}</p>
+              {stat.description && <p className="text-sm text-gray-500 mt-1">{stat.description}</p>}
+            </div>
+          ))}
         </div>
         
         <div className="bg-gray-50 p-6 rounded-lg">
@@ -285,7 +340,7 @@ export default function Family360Page() {
       </section>
 
       {/* 신청 및 문의 */}
-      <section className="bg-[#c69d6c] text-white p-8 rounded-lg text-center">
+      <section style={{ backgroundColor: COLORS.PRIMARY }} className="text-white p-8 rounded-lg text-center">
         <h2 className="text-3xl font-bold mb-4">가정교회 360 안내</h2>
         <p className="mb-6">
           여러분의 가정이 하나님의 사랑으로 가득한 작은 교회가 되도록 함께하세요.
