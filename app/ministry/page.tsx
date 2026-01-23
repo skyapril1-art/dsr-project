@@ -94,7 +94,7 @@ export default function MinistryPage() {
           {pastors.length > 0 ? (
             pastors.map((pastor) => (
               <div key={pastor.id} className="text-center bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition">
-                <div className="relative w-full h-80 mx-auto mb-4 rounded-lg overflow-hidden">
+                <div className="relative w-48 h-64 mx-auto mb-4 rounded-lg overflow-hidden">
                   <Image 
                     src={pastor.imageUrl}
                     alt={pastor.position}

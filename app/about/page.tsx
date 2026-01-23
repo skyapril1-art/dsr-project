@@ -159,7 +159,7 @@ export default async function AboutPage() {
             <Card key={index} className="overflow-hidden" hover>
               <div className="flex flex-col md:flex-row gap-6">
                 {/* 사진 */}
-                <div className="relative w-full md:w-64 h-64 flex-shrink-0 rounded-lg overflow-hidden">
+                <div className="relative w-full md:w-96 md:h-[32rem] flex-shrink-0 rounded-lg overflow-hidden">
                   <Image
                     src={pastor.image}
                     alt={pastor.name}
@@ -172,7 +172,8 @@ export default async function AboutPage() {
                 <div className="flex-1 space-y-4">
                   <h3 className="text-2xl font-bold text-gray-800">{pastor.name}</h3>
                   
-                  <div className="grid md:grid-cols-3 gap-4">
+                  {/* 학력과 경력 */}
+                  <div className="grid md:grid-cols-2 gap-4">
                     {pastor.education && (
                       <div>
                         <h4 className="text-sm font-semibold text-gray-600 mb-2">
@@ -194,18 +195,19 @@ export default async function AboutPage() {
                         </p>
                       </div>
                     )}
-                    
-                    {pastor.message && (
-                      <div>
-                        <h4 className="text-sm font-semibold text-gray-600 mb-2">
-                          <i className="fa-solid fa-comment mr-2"></i>한마디
-                        </h4>
-                        <p className="text-sm text-gray-700 leading-relaxed italic">
-                          "{pastor.message}"
-                        </p>
-                      </div>
-                    )}
                   </div>
+                  
+                  {/* 한마디 */}
+                  {pastor.message && (
+                    <div>
+                      <h4 className="text-sm font-semibold text-gray-600 mb-2">
+                        <i className="fa-solid fa-comment mr-2"></i>한마디
+                      </h4>
+                      <p className="text-sm text-gray-700 leading-relaxed italic">
+                        "{pastor.message}"
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </Card>
