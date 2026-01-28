@@ -60,6 +60,8 @@ export default function LoginPage() {
       if (response.ok) {
         console.log('로그인 성공, 리다이렉트 중...');
         alert('로그인 성공!');
+        // auth-change 이벤트 발생
+        window.dispatchEvent(new Event('auth-change'));
         // alert 닫힌 후 리다이렉트
         setTimeout(() => {
           console.log('페이지 이동 시작');
@@ -75,7 +77,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 pt-10">
+    <div className="min-h-screen flex items-start justify-center bg-gray-50 pt-20">
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
         <h1 className="flex justify-center text-2xl font-bold mb-6">로그인</h1>
         <form onSubmit={handleSubmit} className="space-y-4">

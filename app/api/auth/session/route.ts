@@ -61,8 +61,11 @@ export async function GET(request: NextRequest) {
     if (!sessionId || !sessions.has(sessionId)) {
       console.log('유효하지 않은 세션');
       return NextResponse.json(
-        { error: '유효하지 않은 세션입니다.' },
-        { status: 401 }
+        { 
+          user: null,
+          isAdmin: false
+        },
+        { status: 200 }
       );
     }
 
